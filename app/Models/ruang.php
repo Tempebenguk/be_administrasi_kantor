@@ -22,4 +22,9 @@ class ruang extends Model
         'nama_ruang',
         'cabang',
     ];
+
+    public function cabang()
+    {
+        return $this->belongsTo(cabang::class, 'cabang', 'id_cabang');
+    }
 }
