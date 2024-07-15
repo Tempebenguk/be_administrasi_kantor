@@ -80,9 +80,12 @@ class adminController extends Controller
             'id_admin' => $request->id_admin,
             'nama' => $request->nama,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'no_hp' => $request->no_hp,
         ]);
+
+        if ($request->filled('password')) {
+            $encryptedPassword = bcrypt($request->password);
+            $admin->password = $encryptedPassword;
+        }
 
         return new GlobalResource(true, 'Data Admin Berhasil Diubah!', $admin);
     }
