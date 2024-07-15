@@ -52,12 +52,16 @@ class pegawaiController extends Controller
             'nip' => $request->nip,
             'nama' => $request->nama,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
             'departement' => $request->departement,
             'alamat' => $request->alamat,
             'no_hp' => $request->no_hp,
             'cabang' => $request->cabang,
         ]);
+
+        if ($request->filled('password')) {
+            $encryptedPassword = bcrypt($request->password);
+            $pegawai->password = $encryptedPassword;
+        }
 
         return new GlobalResource(true, 'Data Pegawai Berhasil Ditambahkan!', $pegawai);
     }
