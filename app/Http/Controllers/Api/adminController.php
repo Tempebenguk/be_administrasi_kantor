@@ -80,6 +80,7 @@ class adminController extends Controller
             'id_admin' => $request->id_admin,
             'nama' => $request->nama,
             'email' => $request->email,
+            'no_hp' => $request->no_hp,
         ]);
 
         if ($request->filled('password')) {
