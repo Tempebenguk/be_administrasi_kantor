@@ -23,6 +23,12 @@ class inventarisController extends Controller
         return new GlobalResource(true, 'List Data Inventaris', $inventaris);
     }
 
+    public function indexall()
+    {
+        $inventaris = inventaris::latest()->get();
+        return new GlobalResource(true, 'List Data Inventaris', $inventaris);
+    }
+
     public function indexpegawai()
     {
         $user = auth('api-pegawai')->user();

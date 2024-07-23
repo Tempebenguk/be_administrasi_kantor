@@ -21,6 +21,12 @@ class adminController extends Controller
         return new GlobalResource(true, 'List Data Admin', $admin);
     }
 
+    public function indexall()
+    {
+        $admin = admin::latest()->get();
+        return new GlobalResource(true, 'List Data Admin', $admin);
+    }
+
     /**
      * store
      *

@@ -21,6 +21,12 @@ class tamuController extends Controller
         return new GlobalResource(true, 'List Data Tamu', $tamu);
     }
 
+    public function indexall()
+    {
+        $tamu = tamu::latest()->get();
+        return new GlobalResource(true, 'List Data Tamu', $tamu);
+    }
+
     /**
      * store
      *

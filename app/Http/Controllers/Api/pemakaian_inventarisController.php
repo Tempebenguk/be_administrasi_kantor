@@ -21,6 +21,13 @@ class pemakaian_inventarisController extends Controller
         return new GlobalResource(true, 'List Data Pemakaian Inventaris', $pi);
     }
 
+    public function indexall()
+    {
+        $pi = pemakaian_inventaris::latest()->get();
+        return new GlobalResource(true, 'List Data Pemakaian Inventaris', $pi);
+    }
+
+
     /**
      * store
      *

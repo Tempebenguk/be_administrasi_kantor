@@ -21,6 +21,12 @@ class departementController extends Controller
         return new GlobalResource(true, 'List Data Departement', $departement);
     }
 
+    public function indexall()
+    {
+        $departement = departement::latest()->get();
+        return new GlobalResource(true, 'List Data Departement', $departement);
+    }
+
     /**
      * store
      *

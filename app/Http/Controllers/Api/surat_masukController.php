@@ -21,6 +21,12 @@ class surat_masukController extends Controller
         return new GlobalResource(true, 'List Data Surat Masuk', $sm);
     }
 
+    public function indexall()
+    {
+        $sm = surat_masuk::latest()->get();
+        return new GlobalResource(true, 'List Data Surat Masuk', $sm);
+    }
+
     /**
      * store
      *

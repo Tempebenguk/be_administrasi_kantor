@@ -22,6 +22,12 @@ class pegawaiController extends Controller
         return new GlobalResource(true, 'List Data Pegawai', $pegawai);
     }
 
+    public function indexall()
+    {
+        $pegawai = pegawai::latest()->get();
+        return new GlobalResource(true, 'List Data Pegawai', $pegawai);
+    }
+
 
     /**
      * store

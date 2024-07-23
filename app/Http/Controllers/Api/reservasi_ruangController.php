@@ -21,6 +21,12 @@ class reservasi_ruangController extends Controller
         return new GlobalResource(true, 'List Data Reservasi Ruang', $rr);
     }
 
+    public function indexall()
+    {
+        $rr = reservasi_ruang::latest()->get();
+        return new GlobalResource(true, 'List Data Reservasi Ruang', $rr);
+    }
+
     /**
      * store
      *

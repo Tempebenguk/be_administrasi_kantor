@@ -21,6 +21,12 @@ class surat_keluarController extends Controller
         return new GlobalResource(true, 'List Data Surat Keluar', $sk);
     }
 
+    public function indexall()
+    {
+        $sk = surat_keluar::latest()->get();
+        return new GlobalResource(true, 'List Data Surat Keluar', $sk);
+    }
+
     /**
      * store
      *

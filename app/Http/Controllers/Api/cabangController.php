@@ -21,6 +21,12 @@ class cabangController extends Controller
         return new GlobalResource(true, 'List Data Cabang', $cabang);
     }
 
+    public function indexall()
+    {
+        $cabang = cabang::latest()->get();
+        return new GlobalResource(true, 'List Data Cabang', $cabang);
+    }
+
     /**
      * store
      *

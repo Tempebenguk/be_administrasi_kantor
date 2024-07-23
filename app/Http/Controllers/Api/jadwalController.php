@@ -17,7 +17,13 @@ class jadwalController extends Controller
      */
     public function index()
     {
-        $jadwal = jadwal::latest()->paginate(10);
+        $jadwal = jadwal::latest()->paginate(5);
+        return new GlobalResource(true, 'List Data Jadwal', $jadwal);
+    }
+
+    public function indexall()
+    {
+        $jadwal = jadwal::latest()->get();
         return new GlobalResource(true, 'List Data Jadwal', $jadwal);
     }
 

@@ -21,6 +21,12 @@ class ruangController extends Controller
         return new GlobalResource(true, 'List Data Ruang', $ruang);
     }
 
+    public function indexall()
+    {
+        $ruang = ruang::latest()->get();
+        return new GlobalResource(true, 'List Data Ruang', $ruang);
+    }
+
     public function indexpegawai()
     {
         $user = auth('api-pegawai')->user();
