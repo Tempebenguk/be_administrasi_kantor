@@ -141,7 +141,7 @@ Route::group(['middleware' => ['auth:api-pegawai']], function () {
     Route::get('/cp', [App\Http\Controllers\Api\cabangController::class, 'index']); // Cabang
     Route::get('/rall', [App\Http\Controllers\Api\ruangController::class, 'indexall']); // ruang
     Route::get('/piallp', [App\Http\Controllers\Api\pemakaian_inventarisController::class, 'indexall']); // Pemakaian Inventaris
-    Route::get('/rrall', [App\Http\Controllers\Api\reservasi_ruangController::class, 'indexall']); // Reservasi Ruang
+    Route::get('/rrallp', [App\Http\Controllers\Api\reservasi_ruangController::class, 'indexall']); // Reservasi Ruang
 
     // Show
     Route::get('/jp/{id}', [App\Http\Controllers\Api\jadwalController::class, 'show']); // Jadwal
