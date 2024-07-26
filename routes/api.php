@@ -135,17 +135,23 @@ Route::group(['middleware' => ['auth:api-admin']], function () {
 
 Route::group(['middleware' => ['auth:api-pegawai']], function () {
     // Get
-    Route::get('/jp', [App\Http\Controllers\Api\jadwalController::class, 'indexpegawai']);
-    Route::get('/ip', [App\Http\Controllers\Api\inventarisController::class, 'indexpegawai']);
-    Route::get('/rp', [App\Http\Controllers\Api\ruangController::class, 'indexpegawai']);
-    Route::get('/cp', [App\Http\Controllers\Api\cabangController::class, 'index']);
-    Route::get('/rall', [App\Http\Controllers\Api\ruangController::class, 'indexall']);
+    Route::get('/jp', [App\Http\Controllers\Api\jadwalController::class, 'indexpegawai']); // Jadwal
+    Route::get('/ip', [App\Http\Controllers\Api\inventarisController::class, 'indexpegawai']); // Inventaris
+    Route::get('/rp', [App\Http\Controllers\Api\ruangController::class, 'indexpegawai']); // Ruang
+    Route::get('/cp', [App\Http\Controllers\Api\cabangController::class, 'index']); // Cabang
+    Route::get('/rall', [App\Http\Controllers\Api\ruangController::class, 'indexall']); // ruang
+    Route::get('/piallp', [App\Http\Controllers\Api\pemakaian_inventarisController::class, 'indexall']); // Pemakaian Inventaris
+    Route::get('/rrall', [App\Http\Controllers\Api\reservasi_ruangController::class, 'indexall']); // Reservasi Ruang
 
     // Show
-    Route::get('/jp/{id}', [App\Http\Controllers\Api\jadwalController::class, 'show']);
-    Route::get('/ip/{id}', [App\Http\Controllers\Api\inventarisController::class, 'show']);
-    Route::get('/p/{id}', [App\Http\Controllers\Api\ruangController::class, 'show']);
-    Route::get('/tglp/{tanggal}', [App\Http\Controllers\Api\jadwalController::class, 'showtglp']);
+    Route::get('/jp/{id}', [App\Http\Controllers\Api\jadwalController::class, 'show']); // Jadwal
+    Route::get('/ip/{id}', [App\Http\Controllers\Api\inventarisController::class, 'show']); // Inventaris
+    Route::get('/rp/{id}', [App\Http\Controllers\Api\ruangController::class, 'show']); // Ruang
+    Route::get('/tglp/{tanggal}', [App\Http\Controllers\Api\jadwalController::class, 'showtglp']); // Jadwal parameter tgl
+
+    // Create
+    Route::post('/pip', [App\Http\Controllers\Api\pemakaian_inventarisController::class, 'store']); // Pemakaian Inventaris
+    Route::get('/rrallp', [App\Http\Controllers\Api\reservasi_ruangController::class, 'indexall']); // Reservasi Ruang
 });
 
 
