@@ -130,19 +130,6 @@ Route::group(['middleware' => ['auth:api-admin']], function () {
     Route::put('/tamu/{id}', [App\Http\Controllers\Api\tamuController::class, 'update']);
     Route::delete('/tamu/{id}', [App\Http\Controllers\Api\tamuController::class, 'destroy']);
     Route::get('/tamuall', [App\Http\Controllers\Api\tamuController::class, 'indexall']);
-
-
-    // Master
-    // Route::apiResource('/admin', App\Http\Controllers\Api\adminController::class);
-    // Route::apiResource('/cabang', App\Http\Controllers\Api\cabangController::class);
-    // Route::apiResource('/departement', App\Http\Controllers\Api\departementController::class);
-    // Route::apiResource('/pi', App\Http\Controllers\Api\pemakaian_inventarisController::class);
-    // Route::apiResource('/pegawai', App\Http\Controllers\Api\pegawaiController::class);
-    // Route::apiResource('/rr', App\Http\Controllers\Api\reservasi_ruangController::class);
-    // Route::apiResource('/sk', App\Http\Controllers\Api\surat_keluarController::class);
-    // Route::apiResource('/sm', App\Http\Controllers\Api\surat_masukController::class);
-    // Route::apiResource('/surat', App\Http\Controllers\Api\suratController::class);
-    // Route::apiResource('/tamu', App\Http\Controllers\Api\tamuController::class);
 });
 
 
@@ -158,7 +145,7 @@ Route::group(['middleware' => ['auth:api-pegawai']], function () {
     Route::get('/jp/{id}', [App\Http\Controllers\Api\jadwalController::class, 'show']);
     Route::get('/ip/{id}', [App\Http\Controllers\Api\inventarisController::class, 'show']);
     Route::get('/p/{id}', [App\Http\Controllers\Api\ruangController::class, 'show']);
-    Route::get('/tglp/{tanggal}', [App\Http\Controllers\Api\jadwalController::class, 'showtgl']);
+    Route::get('/tglp/{tanggal}', [App\Http\Controllers\Api\jadwalController::class, 'showtglp']);
 });
 
 

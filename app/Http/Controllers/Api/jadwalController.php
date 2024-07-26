@@ -99,6 +99,31 @@ class jadwalController extends Controller
         return new GlobalResource(true, 'Detail Data Jadwal!', $jadwal);
     }
 
+    public function showtglp($tanggal) {
+        
+        $user = auth('api-pegawai')->user(); 
+
+        $userCabang = $user->cabang; 
+        $userDepartement = $user->departement;
+        $tanggal = date('Y-m-d', strtotime($tanggal)); 
+    
+        $jadwalQuery = jadwal::where('cabang', $userCabang)
+                             ->whereDate('tanggal', $tanggal);
+    
+        if (!is_null($userDepartement)) {
+            $jadwalQuery->where(function($query) use ($userDepartement) {
+                $query->where('status', $userDepartement)
+                      ->orWhereNull('status');
+            });
+        }
+    
+        $jadwal = $jadwalQuery->latest()->get();
+    
+        return new GlobalResource(true, 'Detail Data Jadwal!', $jadwal);
+    }
+    
+
+
     /**
      * update
      *
