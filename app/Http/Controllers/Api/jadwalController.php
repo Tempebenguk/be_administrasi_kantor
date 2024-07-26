@@ -91,6 +91,14 @@ class jadwalController extends Controller
         return new GlobalResource(true, 'Detail Data Jadwal!', $jadwal);
     }
 
+    public function showtgl($tanggal)
+    {   
+        $tanggal = date('Y-m-d', strtotime($tanggal));
+        $jadwal = jadwal::whereDate('tanggal', $tanggal)->get();
+
+        return new GlobalResource(true, 'Detail Data Jadwal!', $jadwal);
+    }
+
     /**
      * update
      *

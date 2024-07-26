@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth:api-admin']], function () {
     Route::put('/jadwal/{id}', [App\Http\Controllers\Api\jadwalController::class, 'update']);
     Route::delete('/jadwal/{id}', [App\Http\Controllers\Api\jadwalController::class, 'destroy']);
     Route::get('/jadwalall', [App\Http\Controllers\Api\jadwalController::class, 'indexall']);
+    Route::get('/showtgl/{tanggal}', [App\Http\Controllers\Api\jadwalController::class, 'showtgl']);
 
     // Inventaris
     Route::get('/inventaris', [App\Http\Controllers\Api\inventarisController::class, 'index']);
@@ -150,11 +151,14 @@ Route::group(['middleware' => ['auth:api-pegawai']], function () {
     Route::get('/jp', [App\Http\Controllers\Api\jadwalController::class, 'indexpegawai']);
     Route::get('/ip', [App\Http\Controllers\Api\inventarisController::class, 'indexpegawai']);
     Route::get('/rp', [App\Http\Controllers\Api\ruangController::class, 'indexpegawai']);
+    Route::get('/cp', [App\Http\Controllers\Api\cabangController::class, 'index']);
+    Route::get('/rall', [App\Http\Controllers\Api\ruangController::class, 'indexall']);
 
     // Show
     Route::get('/jp/{id}', [App\Http\Controllers\Api\jadwalController::class, 'show']);
     Route::get('/ip/{id}', [App\Http\Controllers\Api\inventarisController::class, 'show']);
     Route::get('/p/{id}', [App\Http\Controllers\Api\ruangController::class, 'show']);
+    Route::get('/showtgl/{tanggal}', [App\Http\Controllers\Api\jadwalController::class, 'showtgl']);
 });
 
 
