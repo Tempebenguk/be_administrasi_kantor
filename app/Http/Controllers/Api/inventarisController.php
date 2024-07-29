@@ -88,6 +88,66 @@ class inventarisController extends Controller
         return new GlobalResource(true, 'List Data Inventaris', $inventaris);
     }
 
+    public function indexpegawaidtl($id)
+    {
+        $user = auth('api-pegawai')->user();
+        $userCabang = $user->cabang;
+
+        $inventarisjoin = inventaris::leftJoin('pemakaian_inventaris', 'inventaris.id_inventaris', '=', 'pemakaian_inventaris.inventaris')
+                    ->where('inventaris.cabang', $userCabang)
+                    ->where('inventaris.id_inventaris', $id)
+                    ->select(
+                        'inventaris.id_inventaris',
+                        'inventaris.nopol',
+                        'inventaris.merek',
+                        'inventaris.kategori',
+                        'inventaris.tahun',
+                        'inventaris.pajak',
+                        'inventaris.masa_pajak',
+                        'inventaris.harga_beli',
+                        'inventaris.tanggal_beli',
+                        'inventaris.cabang',
+                        'pemakaian_inventaris.id_pinjam',
+                        'pemakaian_inventaris.inventaris as pem_inventaris',
+                        'pemakaian_inventaris.tanggal_pinjam',
+                        'pemakaian_inventaris.tanggal_kembali',
+                        'pemakaian_inventaris.durasi_pinjam',
+                        'pemakaian_inventaris.pegawai',
+                        'pemakaian_inventaris.keterangan'
+                    )
+                    ->get();
+                    
+        $inventaris = $inventarisjoin->groupBy('id_inventaris')->map(function ($group) {
+            $firstItem = $group->first();
+            $firstItem->pemakaian_inventaris = $group->map(function ($item) {
+                return [
+                    'id_pinjam' => $item->id_pinjam,
+                    'inventaris' => $item->pem_inventaris,
+                    'tanggal_pinjam' => $item->tanggal_pinjam,
+                    'tanggal_kembali' => $item->tanggal_kembali,
+                    'durasi_pinjam' => $item->durasi_pinjam,
+                    'pegawai' => $item->pegawai,
+                    'keterangan' => $item->keterangan
+                ];
+            })->toArray();
+            return [
+                'id_inventaris' => $firstItem->id_inventaris,
+                'nopol' => $firstItem->nopol,
+                'merek' => $firstItem->merek,
+                'kategori' => $firstItem->kategori,
+                'tahun' => $firstItem->tahun,
+                'pajak' => $firstItem->pajak,
+                'masa_pajak' => $firstItem->masa_pajak,
+                'harga_beli' => $firstItem->harga_beli,
+                'tanggal_beli' => $firstItem->tanggal_beli,
+                'cabang' => $firstItem->cabang,
+                'pemakaian_inventaris' => $firstItem->pemakaian_inventaris,
+            ];
+        })->values();
+
+        return new GlobalResource(true, 'List Data Inventaris', $inventaris);
+    }
+
     /**
      * store
      *
