@@ -147,7 +147,7 @@ Route::group(['middleware' => ['auth:api-pegawai']], function () {
     // Show
     Route::get('/jp/{id}', [App\Http\Controllers\Api\jadwalController::class, 'show']); // Jadwal
     Route::get('/ip/{id}', [App\Http\Controllers\Api\inventarisController::class, 'indexpegawaidtl']); // Inventaris
-    Route::get('/rp/{id}', [App\Http\Controllers\Api\ruangController::class, 'show']); // Ruang
+    Route::get('/rp/{id}', [App\Http\Controllers\Api\ruangController::class, 'indexpegawaidtl']); // Ruang
     Route::get('/tglp/{tanggal}', [App\Http\Controllers\Api\jadwalController::class, 'showtglp']); // Jadwal parameter tgl
 
     // Create

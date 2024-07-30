@@ -72,6 +72,52 @@ class ruangController extends Controller
         return new GlobalResource(true, 'List Data Ruang', $ruang);
     }
 
+    public function indexpegawaidtl($id)
+    {
+        $user = auth('api-pegawai')->user();
+        $userCabang = $user->cabang;
+
+        $ruangJoin = ruang::leftJoin('reservasi_ruang', 'ruang.id_ruang', '=', 'reservasi_ruang.ruang')
+                    ->where('ruang.id_ruang', $id)
+                    ->where('ruang.cabang', $userCabang)
+                    ->select(
+                        'ruang.id_ruang',
+                        'ruang.nama_ruang',
+                        'ruang.cabang',
+                        'reservasi_ruang.id_reservasi',
+                        'reservasi_ruang.ruang as reservasi_ruang_id',
+                        'reservasi_ruang.tanggal_reservasi',
+                        'reservasi_ruang.tanggal_selesai',
+                        'reservasi_ruang.durasi',
+                        'reservasi_ruang.pegawai',
+                        'reservasi_ruang.keterangan'
+                    )
+                    ->get();
+
+        $ruang = $ruangJoin->groupBy('id_ruang')->map(function ($group) {
+            $firstItem = $group->first();
+            $firstItem->reservasi_ruang = $group->map(function ($item) {
+                return [
+                    'id_reservasi' => $item->id_reservasi,
+                    'ruang' => $item->reservasi_ruang_id,
+                    'tanggal_reservasi' => $item->tanggal_reservasi,
+                    'tanggal_selesai' => $item->tanggal_selesai,
+                    'durasi' => $item->durasi,
+                    'pegawai' => $item->pegawai,
+                    'keterangan' => $item->keterangan
+                ];
+            })->toArray();
+            return [
+                'id_ruang' => $firstItem->id_ruang,
+                'nama_ruang' => $firstItem->nama_ruang,
+                'cabang' => $firstItem->cabang,
+                'reservasi_ruang' => $firstItem->reservasi_ruang,
+            ];
+        })->values();
+
+        return new GlobalResource(true, 'List Data Ruang', $ruang);
+    }
+
 
     /**
      * store
