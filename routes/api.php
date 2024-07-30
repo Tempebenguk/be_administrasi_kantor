@@ -152,7 +152,7 @@ Route::group(['middleware' => ['auth:api-pegawai']], function () {
 
     // Create
     Route::post('/pip', [App\Http\Controllers\Api\pemakaian_inventarisController::class, 'store']); // Pemakaian Inventaris
-    Route::get('/rrallp', [App\Http\Controllers\Api\reservasi_ruangController::class, 'indexall']); // Reservasi Ruang
+    Route::post('/rrp', [App\Http\Controllers\Api\reservasi_ruangController::class, 'store']); // Reservasi Ruang
 });
 
 
