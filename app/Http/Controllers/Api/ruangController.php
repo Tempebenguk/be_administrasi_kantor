@@ -15,9 +15,14 @@ class ruangController extends Controller
      *
      * @return void
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ruang = ruang::latest()->paginate(5);
+        $keyword = $request->input('keyword');
+
+        $ruang = ruang::when($keyword, function ($query) use ($keyword) {
+            $query->where('cabang', $keyword);
+        })->paginate(5);
+
         return new GlobalResource(true, 'List Data Ruang', $ruang);
     }
 
@@ -118,6 +123,16 @@ class ruangController extends Controller
         return new GlobalResource(true, 'List Data Ruang', $ruang);
     }
 
+    public function searchRuang(Request $request)
+    {
+        $cabang = $request->input('keyword');
+
+        $ruang = ruang::when($cabang, function ($query) use ($cabang) {
+            $query->where('nama', 'LIKE', "%$cabang%");
+        })->paginate(5);
+
+        return new GlobalResource(true, 'List Data Ruang', $ruang);
+    }
 
     /**
      * store
