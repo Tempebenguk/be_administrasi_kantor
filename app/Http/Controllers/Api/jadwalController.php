@@ -69,8 +69,18 @@ class jadwalController extends Controller
         
         $userCabang = $user->cabang;
         $userDepartement = $user->departement;
+        $tahun = $request->input('tahun?');
+        $bulan = $request->input('bulan?');
 
         $jadwalQuery = jadwal::where('cabang', $userCabang);
+
+        if ($tahun) {
+            $jadwalQuery->whereYear('tanggal', $tahun);
+        }
+
+        if ($bulan) {
+            $jadwalQuery->whereMonth('tanggal', $bulan);
+        }
 
         if (!is_null($userDepartement)) {
             $jadwalQuery->where(function($query) use ($userDepartement) {
