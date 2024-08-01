@@ -17,9 +17,14 @@ class inventarisController extends Controller
      *
      * @return void
      */
-    public function index()
-    {
-        $inventaris = inventaris::latest()->paginate(5);
+    public function index(Request $request)
+    {   
+        $cabang = $request->input('cabang?');
+
+        $inventaris = inventaris::when($cabang, function ($query) use ($cabang) {
+            $query->where('cabang', $cabang);
+        })->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Inventaris', $inventaris);
     }
 

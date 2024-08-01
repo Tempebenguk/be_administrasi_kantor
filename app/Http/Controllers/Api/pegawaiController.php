@@ -16,9 +16,17 @@ class pegawaiController extends Controller
      *
      * @return void
      */
-    public function index()
-    {
-        $pegawai = pegawai::latest()->paginate(5);
+    public function index(Request $request)
+    {   
+        $cabang = $request->input('cabang?');
+        $departement = $request->input('departement?');
+
+        $pegawai = pegawai::when($cabang, function ($query) use ($cabang){
+            $query->where('cabang', $cabang);
+        })->when($departement, function ($query) use ($departement) {
+            $query->where('departement', $departement);
+        })->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Pegawai', $pegawai);
     }
 

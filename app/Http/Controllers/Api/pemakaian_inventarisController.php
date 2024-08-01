@@ -15,9 +15,14 @@ class pemakaian_inventarisController extends Controller
      *
      * @return void
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pi = pemakaian_inventaris::latest()->paginate(5);
+        $cabang = $request->input('cabang?');
+
+        $pi = pemakaian_inventaris::when($cabang, function ($query) use ($cabang) {
+            $query->where('cabang', $cabang);
+        })->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Pemakaian Inventaris', $pi);
     }
 

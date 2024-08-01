@@ -15,9 +15,14 @@ class surat_masukController extends Controller
      *
      * @return void
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sm = surat_masuk::latest()->paginate(5);
+        $cabang = $request->input('cabang?');
+
+        $sm = surat_masuk::when($cabang, function ($query) use ($cabang) {
+            $query->where('cabang', $cabang);
+        })->latest()->paginate(5);
+        
         return new GlobalResource(true, 'List Data Surat Masuk', $sm);
     }
 

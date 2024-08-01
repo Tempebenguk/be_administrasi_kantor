@@ -17,11 +17,11 @@ class ruangController extends Controller
      */
     public function index(Request $request)
     {
-        $keyword = $request->input('keyword');
+        $cabang = $request->input('cabang?');
 
-        $ruang = ruang::when($keyword, function ($query) use ($keyword) {
-            $query->where('cabang', $keyword);
-        })->paginate(5);
+        $ruang = ruang::when($cabang, function ($query) use ($cabang) {
+            $query->where('cabang', $cabang);
+        })->latest()->paginate(5);
 
         return new GlobalResource(true, 'List Data Ruang', $ruang);
     }

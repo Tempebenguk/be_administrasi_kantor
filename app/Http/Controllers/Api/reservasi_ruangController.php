@@ -15,9 +15,17 @@ class reservasi_ruangController extends Controller
      *
      * @return void
      */
-    public function index()
-    {
-        $rr = reservasi_ruang::latest()->paginate(5);
+    public function index(Request $request)
+    {   
+        $cabang = $request->input('cabang?');
+        $ruang = $request->input('ruang?');
+
+        $rr = reservasi_ruang::when($cabang, function ($query) use ($cabang) {
+            $query->where('cabang', $cabang);
+        })->when($ruang, function ($query) use ($ruang) {
+            $query->where('ruang', $ruang);
+        })->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Reservasi Ruang', $rr);
     }
 

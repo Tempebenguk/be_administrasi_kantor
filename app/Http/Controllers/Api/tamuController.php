@@ -15,9 +15,17 @@ class tamuController extends Controller
      *
      * @return void
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tamu = tamu::latest()->paginate(5);
+        $cabang = $request->input('cabang?');
+        $departement = $request->input('departement?');
+    
+        $tamu = tamu::when($cabang, function ($query) use ($cabang){
+            $query->where('cabang', $cabang);
+        })->when($departement, function ($query) use ($departement) {
+            $query->where('departement_dikunjungi', $departement);
+        })->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Tamu', $tamu);
     }
 
