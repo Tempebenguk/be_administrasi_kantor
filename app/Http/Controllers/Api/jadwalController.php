@@ -15,9 +15,28 @@ class jadwalController extends Controller
      *
      * @return void
      */
-    public function index()
-    {
-        $jadwal = jadwal::latest()->paginate(5);
+    public function index(Request $request)
+    {   
+        $cabang = $request->input('cabang?');
+        $status = $request->input('status?');
+        $tahun = $request->input('tahun?');
+        $bulan = $request->input('bulan?');
+        $tanggal = $request->input('tanggal?');
+
+        $jadwal = jadwal::when($cabang, function ($query) use ($cabang) {
+            $query->where('cabang', $cabang);
+        })
+        ->when($status, function ($query) use ($status) {
+            $query->where('status', $status);
+        })->when($tahun, function ($query) use ($tahun) {
+            $query->whereYear('tanggal', $tahun);
+        })->when($bulan, function ($query) use ($bulan) {
+            $query->whereMonth('tanggal', $bulan);
+        })->when($tanggal, function ($query) use ($tanggal) {
+            $query->whereDay('tanggal', $tanggal);
+        })
+        ->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Jadwal', $jadwal);
     }
 
