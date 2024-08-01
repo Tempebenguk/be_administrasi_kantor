@@ -9,6 +9,7 @@ use App\Http\Resources\GlobalResource;
 use App\Http\Resources\InventarisResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
 
 class inventarisController extends Controller
 {
@@ -20,10 +21,24 @@ class inventarisController extends Controller
     public function index(Request $request)
     {   
         $cabang = $request->input('cabang?');
+        $keyword = $request->input('keyword');
 
-        $inventaris = inventaris::when($cabang, function ($query) use ($cabang) {
-            $query->where('cabang', $cabang);
-        })->latest()->paginate(5);
+        $inventarisQuery = inventaris::query();
+
+        if ($cabang) {
+            $inventarisQuery->where('cabang', $cabang);
+        }
+
+        if ($keyword) {
+            $inventarisQuery->where(function ($query) use ($keyword) {
+                $query->where('nopol', 'ILIKE', "%$keyword%")
+                    ->orWhere('merek', 'ILIKE', "%$keyword%")
+                    ->orWhere('tahun', 'ILIKE', "%$keyword%")
+                    ->orWhere('id_inventaris', 'ILIKE', "%$keyword%");
+            });
+        }
+
+        $inventaris = $inventarisQuery->latest()->paginate(5);
 
         return new GlobalResource(true, 'List Data Inventaris', $inventaris);
     }

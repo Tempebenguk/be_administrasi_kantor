@@ -20,12 +20,27 @@ class pegawaiController extends Controller
     {   
         $cabang = $request->input('cabang?');
         $departement = $request->input('departement?');
+        $keyword = $request->input('keyword');
 
-        $pegawai = pegawai::when($cabang, function ($query) use ($cabang){
-            $query->where('cabang', $cabang);
-        })->when($departement, function ($query) use ($departement) {
-            $query->where('departement', $departement);
-        })->latest()->paginate(5);
+        $pegawaiQuery = pegawai::query();
+    
+        if ($cabang) {
+            $pegawaiQuery->where('cabang', $cabang);
+        }
+
+        if ($departement) {
+            $pegawaiQuery->where('departement', $departement);
+        }
+
+        if ($keyword) {
+            $pegawaiQuery->where(function ($query) use ($keyword) {
+                $query->where('id_pegawai', 'ILIKE', "%$keyword%")
+                    ->where('nip', 'ILIKE', "%$keyword%")
+                    ->orWhere('nama', 'ILIKE', "%$keyword%");
+            });
+        }
+        
+        $pegawai = $pegawaiQuery->latest()->paginate(5);
 
         return new GlobalResource(true, 'List Data Pegawai', $pegawai);
     }

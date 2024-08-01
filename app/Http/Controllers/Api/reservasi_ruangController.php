@@ -19,12 +19,30 @@ class reservasi_ruangController extends Controller
     {   
         $cabang = $request->input('cabang?');
         $ruang = $request->input('ruang?');
+        $keyword = $request->input('keyword');
 
-        $rr = reservasi_ruang::when($cabang, function ($query) use ($cabang) {
-            $query->where('cabang', $cabang);
-        })->when($ruang, function ($query) use ($ruang) {
-            $query->where('ruang', $ruang);
-        })->latest()->paginate(5);
+        $rrQuery = reservasi_ruang::query();
+
+        if ($cabang) {
+            $rrQuery->where('cabang', $cabang);
+        }
+
+        if ($ruang) {
+            $rrQuery->where('ruang', $ruang);
+        }
+
+        if ($keyword) {
+            $rrQuery->where(function ($query) use ($keyword) {
+                $query->where('id_reservasi', 'ILIKE', "%$keyword%")
+                    ->orWhere('tanggal_reservasi', 'ILIKE', "%$keyword%")
+                    ->orWhere('tanggal_selesai', 'ILIKE', "%$keyword%")
+                    ->orWhere('durasi', 'ILIKE', "%$keyword%")
+                    ->orWhere('pegawai', 'ILIKE', "%$keyword%")
+                    ->orWhere('keterangan', 'ILIKE', "%$keyword%");
+            });
+        }
+        
+        $rr = $rrQuery->latest()->paginate(5);
 
         return new GlobalResource(true, 'List Data Reservasi Ruang', $rr);
     }

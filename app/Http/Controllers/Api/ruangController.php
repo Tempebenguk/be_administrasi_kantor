@@ -18,10 +18,22 @@ class ruangController extends Controller
     public function index(Request $request)
     {
         $cabang = $request->input('cabang?');
+        $keyword = $request->input('keyword');
 
-        $ruang = ruang::when($cabang, function ($query) use ($cabang) {
-            $query->where('cabang', $cabang);
-        })->latest()->paginate(5);
+        $ruangQuery = ruang::query();
+
+        if ($cabang) {
+            $ruangQuery->where('cabang', $cabang);
+        }
+
+        if ($keyword) {
+            $ruangQuery->where(function ($query) use ($keyword) {
+                $query->where('id_ruang', 'ILIKE', "%$keyword%")
+                    ->orWhere('nama_ruang', 'ILIKE', "%$keyword%");
+            });
+        }
+        
+        $ruang = $ruangQuery->latest()->paginate(5);
 
         return new GlobalResource(true, 'List Data Ruang', $ruang);
     }

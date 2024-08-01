@@ -19,12 +19,31 @@ class tamuController extends Controller
     {
         $cabang = $request->input('cabang?');
         $departement = $request->input('departement?');
+        $keyword = $request->input('keyword');
     
-        $tamu = tamu::when($cabang, function ($query) use ($cabang){
-            $query->where('cabang', $cabang);
-        })->when($departement, function ($query) use ($departement) {
-            $query->where('departement_dikunjungi', $departement);
-        })->latest()->paginate(5);
+        $tamuQuery = tamu::query();
+
+        if ($cabang) {
+            $tamuQuery->where('cabang', $cabang);
+        }
+
+        if ($departement) {
+            $tamuQuery->where('departement_dikunjungi', $departement);
+        }
+
+        if ($keyword) {
+            $tamuQuery->where(function ($query) use ($keyword) {
+                $query->where('id_tamu', 'ILIKE', "%$keyword%")
+                    ->orWhere('tanggal_kunjungan', 'ILIKE', "%$keyword%")
+                    ->orWhere('nama', 'ILIKE', "%$keyword%")
+                    ->orWhere('jabatan', 'ILIKE', "%$keyword%")
+                    ->orWhere('no_hp', 'ILIKE', "%$keyword%")
+                    ->orWhere('org_dikunjungi', 'ILIKE', "%$keyword%")
+                    ->orWhere('keperluan', 'ILIKE', "%$keyword%");
+            });
+        }
+        
+        $tamu = $tamuQuery->latest()->paginate(5);
 
         return new GlobalResource(true, 'List Data Tamu', $tamu);
     }

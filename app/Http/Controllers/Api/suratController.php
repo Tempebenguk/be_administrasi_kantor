@@ -15,9 +15,21 @@ class suratController extends Controller
      *
      * @return void
      */
-    public function index()
-    {
-        $surat = surat::latest()->paginate(5);
+    public function index(Request $request)
+    {   
+        $keyword = $request->input('keyword');
+
+        $suratQuery = surat::query();
+
+        if ($keyword) {
+            $suratQuery->where(function ($query) use ($keyword) {
+                $query->where('kode_surat', 'ILIKE', "%$keyword%")
+                    ->orWhere('jenis_surat', 'ILIKE', "%$keyword%");
+            });
+        }
+        
+        $surat = $suratQuery->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Surat', $surat);
     }
 

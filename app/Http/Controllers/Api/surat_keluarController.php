@@ -18,10 +18,26 @@ class surat_keluarController extends Controller
     public function index(Request $request)
     {
         $cabang = $request->input('cabang?');
+        $keyword = $request->input('keyword');
 
-        $sk = surat_keluar::when($cabang, function ($query) use ($cabang) {
-            $query->where('cabang', $cabang);
-        })->latest()->paginate(5);
+        $skQuery = surat_keluar::query();
+        
+        if ($cabang) {
+            $skQuery->where('cabang', $cabang);
+        }
+
+        if ($keyword) {
+            $skQuery->where(function ($query) use ($keyword) {
+                $query->where('id_surat_keluar', 'ILIKE', "%$keyword%")
+                    ->orWhere('nomor_surat', 'ILIKE', "%$keyword%")
+                    ->orWhere('tanggal_surat', 'ILIKE', "%$keyword%")
+                    ->orWhere('tanggal_kirim', 'ILIKE', "%$keyword%")
+                    ->orWhere('tujuan_surat', 'ILIKE', "%$keyword%")
+                    ->orWhere('perihal', 'ILIKE', "%$keyword%");
+            });
+        }
+
+        $sk = $skQuery->latest()->paginate(5);
 
         return new GlobalResource(true, 'List Data Surat Keluar', $sk);
     }

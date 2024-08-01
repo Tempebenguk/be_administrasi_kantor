@@ -16,12 +16,29 @@ class pemakaian_inventarisController extends Controller
      * @return void
      */
     public function index(Request $request)
-    {
+    {   
         $cabang = $request->input('cabang?');
+        $keyword = $request->input('keyword');
 
-        $pi = pemakaian_inventaris::when($cabang, function ($query) use ($cabang) {
-            $query->where('cabang', $cabang);
-        })->latest()->paginate(5);
+        $piQuery = pemakaian_inventaris::query();
+
+        if ($cabang) {
+            $piQuery->where('cabang', $cabang);
+        }
+
+        if ($keyword) {
+            $piQuery->where(function ($query) use ($keyword) {
+                $query->where('id_pinjam', 'ILIKE', "%$keyword%")
+                    ->orWhere('inventaris', 'ILIKE', "%$keyword%")
+                    ->orWhere('tanggal_pinjam', 'ILIKE', "%$keyword%")
+                    ->orWhere('tanggal_kembali', 'ILIKE', "%$keyword%")
+                    ->orWhere('durasi_pinjam', 'ILIKE', "%$keyword%")
+                    ->orWhere('pegawai', 'ILIKE', "%$keyword%")
+                    ->orWhere('keterangan', 'ILIKE', "%$keyword%");
+            });
+        }
+
+        $pi = $piQuery->latest()->paginate(5);
 
         return new GlobalResource(true, 'List Data Pemakaian Inventaris', $pi);
     }

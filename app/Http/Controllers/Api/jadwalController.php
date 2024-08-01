@@ -22,20 +22,37 @@ class jadwalController extends Controller
         $tahun = $request->input('tahun?');
         $bulan = $request->input('bulan?');
         $tanggal = $request->input('tanggal?');
+        $keyword = $request->input('keyword');
 
-        $jadwal = jadwal::when($cabang, function ($query) use ($cabang) {
-            $query->where('cabang', $cabang);
-        })
-        ->when($status, function ($query) use ($status) {
-            $query->where('status', $status);
-        })->when($tahun, function ($query) use ($tahun) {
-            $query->whereYear('tanggal', $tahun);
-        })->when($bulan, function ($query) use ($bulan) {
-            $query->whereMonth('tanggal', $bulan);
-        })->when($tanggal, function ($query) use ($tanggal) {
-            $query->whereDay('tanggal', $tanggal);
-        })
-        ->latest()->paginate(5);
+        $jadwalQuery = jadwal::query();
+        
+        if ($cabang) {
+            $jadwalQuery->where('cabang', $cabang);
+        }
+
+        if ($status) {
+            $jadwalQuery->where('status', $status);
+        }
+
+        if ($tahun) {
+            $jadwalQuery->whereYear('tanggal', $tahun);
+        }
+
+        if ($bulan) {
+            $jadwalQuery->whereMonth('tanggal', $bulan);
+        }
+
+        if ($tanggal) {
+            $jadwalQuery->whereDay('tanggal', $tanggal);
+        }
+        
+        if ($keyword) {
+            $jadwalQuery->where(function ($query) use ($keyword) {
+                $query->where('agenda', 'ILIKE', "%$keyword%");
+            });
+        }
+
+        $jadwal = $jadwalQuery->latest()->paginate(5);
 
         return new GlobalResource(true, 'List Data Jadwal', $jadwal);
     }
@@ -124,6 +141,7 @@ class jadwalController extends Controller
 
         $userCabang = $user->cabang; 
         $userDepartement = $user->departement;
+
         $tanggal = date('Y-m-d', strtotime($tanggal)); 
     
         $jadwalQuery = jadwal::where('cabang', $userCabang)

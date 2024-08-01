@@ -15,9 +15,15 @@ class adminController extends Controller
      *
      * @return void
      */
-    public function index()
+    public function index(Request $request)
     {
-        $admin = admin::latest()->paginate(5);
+        $keyword = $request->input('keyword');
+
+        $admin = admin::when($keyword, function ($query) use ($keyword) {
+            $query->where('id_admin', 'ILIKE', "%$keyword%")
+                ->orWhere('nama', 'ILIKE', "%$keyword%");
+        })->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Admin', $admin);
     }
 

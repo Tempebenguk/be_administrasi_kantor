@@ -15,9 +15,15 @@ class cabangController extends Controller
      *
      * @return void
      */
-    public function index()
-    {
-        $cabang = cabang::latest()->paginate(5);
+    public function index(Request $request)
+    {   
+        $keyword = $request->input('keyword');
+
+        $cabang = cabang::when($keyword, function ($query) use ($keyword) {
+            $query->where('id_cabang', 'ILIKE', "%$keyword%")
+                ->orWhere('nama_cabang', 'ILIKE', "%$keyword%");
+        })->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Cabang', $cabang);
     }
 

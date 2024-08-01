@@ -17,10 +17,11 @@ class departementController extends Controller
      */
     public function index(Request $request)
     {
-        $cabang = $request->input('cabang?');
+        $keyword = $request->input('keyword');
 
-        $departement = departement::when($cabang, function ($query) use ($cabang) {
-            $query->where('cabang', $cabang);
+        $departement = departement::when($keyword, function ($query) use ($keyword) {
+            $query->where('id_departement', 'ILIKE', "%$keyword%")
+                ->orWhere('nama_departement', 'ILIKE', "%$keyword%");
         })->latest()->paginate(5);
         
         return new GlobalResource(true, 'List Data Departement', $departement);

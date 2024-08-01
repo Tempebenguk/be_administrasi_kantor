@@ -18,11 +18,27 @@ class surat_masukController extends Controller
     public function index(Request $request)
     {
         $cabang = $request->input('cabang?');
+        $keyword = $request->input('keyword');
 
-        $sm = surat_masuk::when($cabang, function ($query) use ($cabang) {
-            $query->where('cabang', $cabang);
-        })->latest()->paginate(5);
+        $smQuery = surat_masuk::query();
+
+        if ($cabang) {
+            $smQuery->where('cabang', $cabang);
+        }
+
+        if ($keyword) {
+            $smQuery->where(function ($query) use ($keyword) {
+                $query->where('id_surat_masuk', 'ILIKE', "%$keyword%")
+                    ->orWhere('nomor_surat', 'ILIKE', "%$keyword%")
+                    ->orWhere('tanggal_surat', 'ILIKE', "%$keyword%")
+                    ->orWhere('tanggal_terima', 'ILIKE', "%$keyword%")
+                    ->orWhere('asal_surat', 'ILIKE', "%$keyword%")
+                    ->orWhere('perihal', 'ILIKE', "%$keyword%");
+            });
+        }
         
+        $sm = $smQuery->latest()->paginate(5);
+
         return new GlobalResource(true, 'List Data Surat Masuk', $sm);
     }
 
