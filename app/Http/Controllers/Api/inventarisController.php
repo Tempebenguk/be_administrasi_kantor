@@ -21,12 +21,17 @@ class inventarisController extends Controller
     public function index(Request $request)
     {   
         $cabang = $request->input('cabang?');
+        $kategori = $request->input('kategori?');
         $keyword = $request->input('keyword');
 
         $inventarisQuery = inventaris::query();
 
         if ($cabang) {
             $inventarisQuery->where('cabang', $cabang);
+        }
+
+        if ($kategori) {
+            $inventarisQuery->where('kategori', $kategori);
         }
 
         if ($keyword) {
