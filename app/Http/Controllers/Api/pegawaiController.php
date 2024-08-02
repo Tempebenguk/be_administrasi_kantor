@@ -35,7 +35,7 @@ class pegawaiController extends Controller
         if ($keyword) {
             $pegawaiQuery->where(function ($query) use ($keyword) {
                 $query->where('id_pegawai', 'ILIKE', "%$keyword%")
-                    ->where('nip', 'ILIKE', "%$keyword%")
+                    ->orWhere('nip', 'ILIKE', "%$keyword%")
                     ->orWhere('nama', 'ILIKE', "%$keyword%");
             });
         }
