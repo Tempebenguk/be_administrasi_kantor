@@ -122,7 +122,7 @@ class adminController extends Controller
             $encryptedPassword = bcrypt($request->password);
             $admin->password = $encryptedPassword;
 
-            $admin->save();
+            // $admin->save();
         }
 
         return new GlobalResource(true, 'Data Admin Berhasil Diubah!', $admin);

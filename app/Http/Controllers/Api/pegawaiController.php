@@ -141,7 +141,7 @@ class pegawaiController extends Controller
             $encryptedPassword = bcrypt($request->password);
             $pegawai->password = $encryptedPassword;
 
-            $pegawai->save();
+            // $pegawai->save();
         }
 
         if ($request->hasFile('foto')) {
