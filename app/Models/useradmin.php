@@ -6,6 +6,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 class useradmin extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
@@ -24,6 +26,9 @@ class useradmin extends Authenticatable implements JWTSubject
         'email',
         'password',
         'no_hp',
+        'foto',
+        'jenkel',
+        'status',
     ];
 
     /**
@@ -66,5 +71,12 @@ class useradmin extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    protected function foto(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($foto) => url('/storage/admin/' . $foto),
+        );
     }
 }

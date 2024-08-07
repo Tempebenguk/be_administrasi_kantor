@@ -6,6 +6,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class userpegawai extends Authenticatable implements JWTSubject
 {
@@ -29,6 +30,9 @@ class userpegawai extends Authenticatable implements JWTSubject
         'alamat',
         'no_hp',
         'cabang',
+        'foto',
+        'jenkel',
+        'status',
     ];
 
     /**
@@ -71,5 +75,12 @@ class userpegawai extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    protected function foto(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($foto) => url('/storage/pegawai/' . $foto),
+        );
     }
 }
