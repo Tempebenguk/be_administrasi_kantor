@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\pegawai;
 use App\Http\Resources\GlobalResource;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Storage;
 
 class pegawaiController extends Controller
 {
@@ -70,11 +70,17 @@ class pegawaiController extends Controller
             'alamat' => 'required',
             'no_hp' => 'required',
             'cabang' => 'required',
+            'foto' => 'required|image|mimes:jpeg,png,jpg',
+            'jenkel' => 'required',
+            'status' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         };
+
+        $image = $request->file('foto');
+        $image->storeAs('public/pegawai', $image->hashName());
 
         $pegawai = pegawai::create([
             'id_pegawai' => $request->id_pegawai,
@@ -86,6 +92,9 @@ class pegawaiController extends Controller
             'alamat' => $request->alamat,
             'no_hp' => $request->no_hp,
             'cabang' => $request->cabang,
+            'foto' => $image->hashName(),
+            'jenkel' => $request->jenkel,
+            'status' => $request->status,
         ]);
 
         return new GlobalResource(true, 'Data Pegawai Berhasil Ditambahkan!', $pegawai);
@@ -116,7 +125,7 @@ class pegawaiController extends Controller
         $pegawai = pegawai::find($id);
 
         $pegawai->update([
-           'id_pegawai' => $request->id_pegawai,
+            'id_pegawai' => $request->id_pegawai,
             'nip' => $request->nip,
             'nama' => $request->nama,
             'email' => $request->email,
@@ -124,11 +133,25 @@ class pegawaiController extends Controller
             'alamat' => $request->alamat,
             'no_hp' => $request->no_hp,
             'cabang' => $request->cabang,
+            'jenkel' => $request->jenkel,
+            'status' => $request->status,
         ]);
 
         if ($request->filled('password')) {
             $encryptedPassword = bcrypt($request->password);
             $pegawai->password = $encryptedPassword;
+
+            $pegawai->save();
+        }
+
+        if ($request->hasFile('foto')) {
+
+            $image = $request->file('foto');
+            $image->storeAs('public/pegawai', $image->hashName());
+            Storage::delete('public/pegawai/' . basename($pegawai->foto));
+            $pegawai->foto = $image->hashName();
+
+            $pegawai->save();
         }
 
         return new GlobalResource(true, 'Data Pegawai Berhasil Diubah!', $pegawai);

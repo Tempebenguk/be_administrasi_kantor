@@ -23,5 +23,8 @@ class admin extends Model
         'email',
         'password',
         'no_hp',
+        'foto',
+        'jenkel',
+        'status',
     ];
 }

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\admin;
 use App\Http\Resources\GlobalResource;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class adminController extends Controller
 {
@@ -47,11 +49,17 @@ class adminController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8',
             'no_hp' => 'required',
+            'foto' => 'required|image|mimes:jpeg,png,jpg',
+            'jenkel' => 'required',
+            'status' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         };
+
+        $image = $request->file('foto');
+        $image->storeAs('public/admin', $image->hashName());
 
         $admin = admin::create([
             'id_admin' => $request->id_admin,
@@ -59,6 +67,9 @@ class adminController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'no_hp' => $request->no_hp,
+            'foto' => $image->hashName(),
+            'jenkel' => $request->jenkel,
+            'status' => $request->status,
         ]);
 
         return new GlobalResource(true, 'Data Admin Berhasil Ditambahkan!', $admin);
@@ -93,11 +104,25 @@ class adminController extends Controller
             'nama' => $request->nama,
             'email' => $request->email,
             'no_hp' => $request->no_hp,
+            'jenkel' => $request->jenkel,
+            'status' => $request->status,
         ]);
+
+        if ($request->hasFile('foto')) {
+
+            $image = $request->file('foto');
+            $image->storeAs('public/admin', $image->hashName());
+            Storage::delete('public/admin/' . basename($admin->foto));
+            $admin->foto = $image->hashName();
+
+            $admin->save();
+        }
 
         if ($request->filled('password')) {
             $encryptedPassword = bcrypt($request->password);
             $admin->password = $encryptedPassword;
+
+            $admin->save();
         }
 
         return new GlobalResource(true, 'Data Admin Berhasil Diubah!', $admin);

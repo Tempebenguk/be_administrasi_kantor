@@ -27,5 +27,8 @@ class pegawai extends Model
         'alamat',
         'no_hp',
         'cabang',
+        'foto',
+        'jenkel',
+        'status',
     ];
 }
