@@ -166,7 +166,7 @@ class pegawaiController extends Controller
     public function destroy($id)
     {
         $pegawai = pegawai::find($id);
-
+        Storage::delete('public/pegawai/' . basename($pegawai->foto));
         $pegawai->delete();
 
         return new GlobalResource(true, 'Data Pegawai Berhasil Dihapus!', null);

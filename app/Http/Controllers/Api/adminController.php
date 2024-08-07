@@ -137,6 +137,7 @@ class adminController extends Controller
     public function destroy($id)
     {
         $admin = admin::find($id);
+        Storage::delete('public/admin/'. basename($admin->foto));
 
         $admin->delete();
 
