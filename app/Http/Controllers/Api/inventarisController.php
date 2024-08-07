@@ -10,6 +10,7 @@ use App\Http\Resources\InventarisResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class inventarisController extends Controller
 {
@@ -183,7 +184,7 @@ class inventarisController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_inventaris' => 'required',
-            'nopol' => 'required',
+            'nopol' => 'required|unique:inventaris,nopol',
             'merek' => 'required',
             'kategori' => 'required',
             'tahun' => 'required',
@@ -192,11 +193,15 @@ class inventarisController extends Controller
             'harga_beli' => 'required',
             'tanggal_beli' => 'required',
             'cabang' => 'required',
+            'foto' => 'image|mimes:jpeg,png,jpg',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         };
+
+        $image = $request->file('foto');
+        $image->storeAs('public/inventaris', $image->hashName());
 
         $inventaris = inventaris::create([
             'id_inventaris' => $request->id_inventaris,
@@ -209,6 +214,7 @@ class inventarisController extends Controller
             'harga_beli' => $request->harga_beli,
             'tanggal_beli' => $request->tanggal_beli,
             'cabang' => $request->cabang,
+            'foto' => $image->hashName(),
         ]);
 
         return new GlobalResource(true, 'Data Inventaris Berhasil Ditambahkan!', $inventaris);
@@ -238,6 +244,14 @@ class inventarisController extends Controller
     {
         $inventaris = inventaris::find($id);
 
+        $validator = Validator::make($request->all(), [
+            'nopol' => 'required|unique:inventaris,nopol,' . $id . ',id_inventaris',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        };
+
         $inventaris->update([
             'id_inventaris' => $request->id_inventaris,
             'nopol' => $request->nopol,
@@ -251,6 +265,16 @@ class inventarisController extends Controller
             'cabang' => $request->cabang,
         ]);
 
+        if ($request->hasFile('foto')) {
+
+            $image = $request->file('foto');
+            $image->storeAs('public/inventaris', $image->hashName());
+            Storage::delete('public/inventaris/' . basename($inventaris->foto));
+            $inventaris->foto = $image->hashName();
+
+            $inventaris->save();
+        }
+
         return new GlobalResource(true, 'Data Inventaris Berhasil Diubah!', $inventaris);
     }
 
@@ -263,7 +287,7 @@ class inventarisController extends Controller
     public function destroy($id)
     {
         $inventaris = inventaris::find($id);
-
+        Storage::delete('public/inventaris/' . basename($inventaris->foto));
         $inventaris->delete();
 
         return new GlobalResource(true, 'Data Inventaris Berhasil Dihapus!', null);

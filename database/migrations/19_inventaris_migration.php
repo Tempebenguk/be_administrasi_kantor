@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('harga_beli');
             $table->date('tanggal_beli');
             $table->string('cabang');
+            $table->string('foto')->nullable();
             $table->timestamps();
 
             $table->foreign('cabang')->references('id_cabang')->on('cabang')->onDelete('cascade');

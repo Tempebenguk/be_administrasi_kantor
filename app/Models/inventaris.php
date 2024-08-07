@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class inventaris extends Model
 {
@@ -28,10 +29,18 @@ class inventaris extends Model
         'harga_beli',
         'tanggal_beli',
         'cabang',
+        'foto',
     ];
 
     public function pemakaian_inventaris()
     {
         return $this->hasMany(pemakaian_inventaris::class, 'inventaris', 'id_inventaris');
+    }
+
+    protected function foto(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($foto) => url('/storage/inventaris/' . $foto),
+        );
     }
 }

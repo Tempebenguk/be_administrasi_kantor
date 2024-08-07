@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('id_ruang')->primary()->unique();
             $table->string('nama_ruang');
             $table->string('cabang');
+            $table->string('foto')->nullable();
             $table->timestamps();
 
             $table->foreign('cabang')->references('id_cabang')->on('cabang')->onDelete('cascade');

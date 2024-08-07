@@ -70,7 +70,7 @@ class pegawaiController extends Controller
             'alamat' => 'required',
             'no_hp' => 'required',
             'cabang' => 'required',
-            'foto' => 'required|image|mimes:jpeg,png,jpg',
+            'foto' => 'image|mimes:jpeg,png,jpg',
             'jenkel' => 'required',
             'status' => 'required',
         ]);

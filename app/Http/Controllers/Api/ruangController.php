@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ruang;
 use App\Http\Resources\GlobalResource;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ruangController extends Controller
 {
@@ -158,16 +159,21 @@ class ruangController extends Controller
             'id_ruang' => 'required',
             'nama_ruang' => 'required',
             'cabang' => 'required',
+            'foto' => 'image|mimes:jpeg,png,jpg',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         };
 
+        $image = $request->file('foto');
+        $image->storeAs('public/ruang', $image->hashName());
+
         $ruang = ruang::create([
             'id_ruang' => $request->id_ruang,
             'nama_ruang' => $request->nama_ruang,
             'cabang' => $request->cabang,
+            'foto' => $image->hashName(),
         ]);
 
         return new GlobalResource(true, 'Data Ruang Berhasil Ditambahkan!', $ruang);
@@ -203,6 +209,16 @@ class ruangController extends Controller
             'cabang' => $request->cabang,
         ]);
 
+        if ($request->hasFile('foto')) {
+
+            $image = $request->file('foto');
+            $image->storeAs('public/ruang', $image->hashName());
+            Storage::delete('public/ruang/' . basename($ruang->foto));
+            $ruang->foto = $image->hashName();
+
+            $ruang->save();
+        }
+
         return new GlobalResource(true, 'Data Ruang Berhasil Diubah!', $ruang);
     }
 
@@ -215,7 +231,7 @@ class ruangController extends Controller
     public function destroy($id)
     {
         $ruang = ruang::find($id);
-
+        Storage::delete('public/ruang/' . basename($ruang->foto));
         $ruang->delete();
 
         return new GlobalResource(true, 'Data Ruang Berhasil Dihapus!', null);

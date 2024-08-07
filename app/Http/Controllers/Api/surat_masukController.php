@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\surat_masuk;
 use App\Http\Resources\GlobalResource;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class surat_masukController extends Controller
 {
@@ -64,11 +65,15 @@ class surat_masukController extends Controller
             'asal_surat' => 'required',
             'perihal' => 'required',
             'cabang' => 'required',
+            'foto' => 'image|mimes:jpeg,png,jpg',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         };
+
+        $image = $request->file('foto');
+        $image->storeAs('public/sm', $image->hashName());
 
         $sm = surat_masuk::create([
             'id_surat_masuk' => $request->id_surat_masuk,
@@ -78,6 +83,7 @@ class surat_masukController extends Controller
             'asal_surat' => $request->asal_surat,
             'perihal' => $request->perihal,
             'cabang' => $request->cabang,
+            'foto' => $image->hashName(),
         ]);
 
         return new GlobalResource(true, 'Data Surat Masuk Berhasil Ditambahkan!', $sm);
@@ -117,6 +123,16 @@ class surat_masukController extends Controller
             'cabang' => $request->cabang,
         ]);
 
+        if ($request->hasFile('foto')) {
+
+            $image = $request->file('foto');
+            $image->storeAs('public/sm', $image->hashName());
+            Storage::delete('public/sm/' . basename($sm->foto));
+            $sm->foto = $image->hashName();
+
+            $sm->save();
+        }
+
         return new GlobalResource(true, 'Data Surat Masuk Berhasil Diubah!', $sm);
     }
 
@@ -129,7 +145,7 @@ class surat_masukController extends Controller
     public function destroy($id)
     {
         $sm = surat_masuk::find($id);
-
+        Storage::delete('public/sm/' . basename($sm->foto));
         $sm->delete();
 
         return new GlobalResource(true, 'Data Surat Masuk Berhasil Dihapus!', null);
