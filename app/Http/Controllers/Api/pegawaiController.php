@@ -169,16 +169,12 @@ class pegawaiController extends Controller
                     'message' => 'Password lama tidak sesuai!'
                 ], 400);
             }
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Password lama diperlukan!'
-            ], 400);
         }
 
         if ($request->filled('password')) {
             $encryptedPassword = bcrypt($request->password);
             $pegawai->password = $encryptedPassword;
+
 
             $pegawai->save();
         }

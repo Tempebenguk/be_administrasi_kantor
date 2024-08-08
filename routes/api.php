@@ -155,7 +155,7 @@ Route::group(['middleware' => ['auth:api-pegawai']], function () {
     Route::post('/rrp', [App\Http\Controllers\Api\reservasi_ruangController::class, 'store']); // Reservasi Ruang
 
     // Update
-    Route::put('/updatep/{id}', [App\Http\Controllers\Api\pegawaiController::class, 'updatepegawai']);
+    Route::put('/updatep/{id}', [App\Http\Controllers\Api\pegawaiController::class, 'updatepegawai']); // Update gambar & Password
 });
 
 
