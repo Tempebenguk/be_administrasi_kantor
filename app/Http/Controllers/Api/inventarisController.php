@@ -73,6 +73,7 @@ class inventarisController extends Controller
                         'inventaris.harga_beli',
                         'inventaris.tanggal_beli',
                         'inventaris.cabang',
+                        'inventaris.foto',
                         'pemakaian_inventaris.id_pinjam',
                         'pemakaian_inventaris.inventaris as pem_inventaris',
                         'pemakaian_inventaris.tanggal_pinjam',
@@ -107,6 +108,7 @@ class inventarisController extends Controller
                 'harga_beli' => $firstItem->harga_beli,
                 'tanggal_beli' => $firstItem->tanggal_beli,
                 'cabang' => $firstItem->cabang,
+                'foto' => $firstItem->foto,
                 'pemakaian_inventaris' => $firstItem->pemakaian_inventaris,
             ];
         })->values();
@@ -133,6 +135,7 @@ class inventarisController extends Controller
                         'inventaris.harga_beli',
                         'inventaris.tanggal_beli',
                         'inventaris.cabang',
+                        'inventaris.foto',
                         'pemakaian_inventaris.id_pinjam',
                         'pemakaian_inventaris.inventaris as pem_inventaris',
                         'pemakaian_inventaris.tanggal_pinjam',
@@ -167,6 +170,7 @@ class inventarisController extends Controller
                 'harga_beli' => $firstItem->harga_beli,
                 'tanggal_beli' => $firstItem->tanggal_beli,
                 'cabang' => $firstItem->cabang,
+                'foto' => $firstItem->foto,
                 'pemakaian_inventaris' => $firstItem->pemakaian_inventaris,
             ];
         })->values();

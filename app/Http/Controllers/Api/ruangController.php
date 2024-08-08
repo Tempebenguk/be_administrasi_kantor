@@ -56,6 +56,7 @@ class ruangController extends Controller
                         'ruang.id_ruang',
                         'ruang.nama_ruang',
                         'ruang.cabang',
+                        'ruang.foto',
                         'reservasi_ruang.id_reservasi',
                         'reservasi_ruang.ruang as reservasi_ruang_id',
                         'reservasi_ruang.tanggal_reservasi',
@@ -83,6 +84,7 @@ class ruangController extends Controller
                 'id_ruang' => $firstItem->id_ruang,
                 'nama_ruang' => $firstItem->nama_ruang,
                 'cabang' => $firstItem->cabang,
+                'foto' => $firstItem->foto,
                 'reservasi_ruang' => $firstItem->reservasi_ruang,
             ];
         })->values();
@@ -102,6 +104,7 @@ class ruangController extends Controller
                         'ruang.id_ruang',
                         'ruang.nama_ruang',
                         'ruang.cabang',
+                        'ruang.foto',
                         'reservasi_ruang.id_reservasi',
                         'reservasi_ruang.ruang as reservasi_ruang_id',
                         'reservasi_ruang.tanggal_reservasi',
@@ -129,6 +132,7 @@ class ruangController extends Controller
                 'id_ruang' => $firstItem->id_ruang,
                 'nama_ruang' => $firstItem->nama_ruang,
                 'cabang' => $firstItem->cabang,
+                'foto' => $firstItem->foto,
                 'reservasi_ruang' => $firstItem->reservasi_ruang,
             ];
         })->values();
