@@ -49,7 +49,7 @@ class adminController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8',
             'no_hp' => 'required',
-            'foto' => 'image|mimes:jpeg,png,jpg',
+            'foto' => 'mimes:jpeg,png,jpg',
             'jenkel' => 'required',
             'status' => 'required',
         ]);
