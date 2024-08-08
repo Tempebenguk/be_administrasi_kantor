@@ -31,7 +31,6 @@ class surat_masukController extends Controller
             $smQuery->where(function ($query) use ($keyword) {
                 $query->where('id_surat_masuk', 'ILIKE', "%$keyword%")
                     ->orWhere('nomor_surat', 'ILIKE', "%$keyword%")
-                    ->orWhere('tanggal_surat', 'ILIKE', "%$keyword%")
                     ->orWhere('tanggal_terima', 'ILIKE', "%$keyword%")
                     ->orWhere('asal_surat', 'ILIKE', "%$keyword%")
                     ->orWhere('perihal', 'ILIKE', "%$keyword%");
@@ -60,7 +59,6 @@ class surat_masukController extends Controller
         $validator = Validator::make($request->all(), [
             'id_surat_masuk' => 'required',
             'nomor_surat' => 'required',
-            'tanggal_surat' => 'required',
             'tanggal_terima' => 'required',
             'asal_surat' => 'required',
             'perihal' => 'required',
@@ -78,7 +76,6 @@ class surat_masukController extends Controller
         $sm = surat_masuk::create([
             'id_surat_masuk' => $request->id_surat_masuk,
             'nomor_surat' => $request->nomor_surat,
-            'tanggal_surat' => $request->tanggal_surat,
             'tanggal_terima' => $request->tanggal_terima,
             'asal_surat' => $request->asal_surat,
             'perihal' => $request->perihal,
@@ -116,7 +113,6 @@ class surat_masukController extends Controller
         $sm->update([
             'id_surat_masuk' => $request->id_surat_masuk,
             'nomor_surat' => $request->nomor_surat,
-            'tanggal_surat' => $request->tanggal_surat,
             'tanggal_terima' => $request->tanggal_terima,
             'asal_surat' => $request->asal_surat,
             'perihal' => $request->perihal,
