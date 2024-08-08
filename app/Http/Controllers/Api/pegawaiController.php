@@ -157,6 +157,30 @@ class pegawaiController extends Controller
         return new GlobalResource(true, 'Data Pegawai Berhasil Diubah!', $pegawai);
     }
 
+    public function updatepegawai(Request $request, $id)
+    {
+        $pegawai = pegawai::find($id);
+
+        if ($request->filled('password')) {
+            $encryptedPassword = bcrypt($request->password);
+            $pegawai->password = $encryptedPassword;
+
+            $pegawai->save();
+        }
+
+        if ($request->hasFile('foto')) {
+
+            $image = $request->file('foto');
+            $image->storeAs('public/pegawai', $image->hashName());
+            Storage::delete('public/pegawai/' . basename($pegawai->foto));
+            $pegawai->foto = $image->hashName();
+
+            $pegawai->save();
+        }
+
+        return new GlobalResource(true, 'Data Pegawai Berhasil Diubah!', $pegawai);
+    }
+
     /**
      * destroy
      *
