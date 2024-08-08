@@ -8,6 +8,7 @@ use App\Models\pegawai;
 use App\Http\Resources\GlobalResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 class pegawaiController extends Controller
 {
@@ -160,6 +161,20 @@ class pegawaiController extends Controller
     public function updatepegawai(Request $request, $id)
     {
         $pegawai = pegawai::find($id);
+
+        if ($request->filled('password_lama')) {
+            if (!Hash::check($request->password_lama, $pegawai->password)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Password lama tidak sesuai!'
+                ], 400);
+            }
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Password lama diperlukan!'
+            ], 400);
+        }
 
         if ($request->filled('password')) {
             $encryptedPassword = bcrypt($request->password);
