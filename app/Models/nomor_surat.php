@@ -5,12 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class surat extends Model
+class nomor_surat extends Model
 {
     use HasFactory;
-    protected $table = 'surat';
-    protected $primaryKey = 'kode_surat';
-    public $incrementing = false;
+    protected $table = 'nomor_surat';
 
     /**
      * fillable
@@ -18,8 +16,6 @@ class surat extends Model
      * @var array
      */
     protected $fillable = [
-        'kode_surat',
-        'jenis_surat',
-        'prefix_surat',
+        'format',
     ];
 }

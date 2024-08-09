@@ -162,20 +162,22 @@ class pegawaiController extends Controller
     {
         $pegawai = pegawai::find($id);
 
-        if ($request->filled('password_lama')) {
+        if ($request->filled('password')) {
+            if (!$request->filled('password_lama')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Password lama diperlukan!'
+                ], 400);
+            }
+
             if (!Hash::check($request->password_lama, $pegawai->password)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Password lama tidak sesuai!'
                 ], 400);
             }
-        }
 
-        if ($request->filled('password')) {
-            $encryptedPassword = bcrypt($request->password);
-            $pegawai->password = $encryptedPassword;
-
-
+            $pegawai->password = bcrypt($request->password);
             $pegawai->save();
         }
 

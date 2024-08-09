@@ -24,7 +24,8 @@ class suratController extends Controller
         if ($keyword) {
             $suratQuery->where(function ($query) use ($keyword) {
                 $query->where('kode_surat', 'ILIKE', "%$keyword%")
-                    ->orWhere('jenis_surat', 'ILIKE', "%$keyword%");
+                    ->orWhere('jenis_surat', 'ILIKE', "%$keyword%")
+                    ->orWhere('prefix_surat', 'ILIKE', "%$keyword%");
             });
         }
         
@@ -44,6 +45,7 @@ class suratController extends Controller
         $validator = Validator::make($request->all(), [
             'kode_surat' => 'required',
             'jenis_surat' => 'required',
+            'prefix_surat' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -53,6 +55,7 @@ class suratController extends Controller
         $surat = surat::create([
             'kode_surat' => $request->kode_surat,
             'jenis_surat' => $request->jenis_surat,
+            'prefix_surat' => $request->prefix_surat,
         ]);
 
         return new GlobalResource(true, 'Data Surat Berhasil Ditambahkan!', $surat);
@@ -85,6 +88,7 @@ class suratController extends Controller
         $surat->update([
             'kode_surat' => $request->kode_surat,
             'jenis_surat' => $request->jenis_surat,
+            'prefix_surat' => $request->prefix_surat,
         ]);
 
         return new GlobalResource(true, 'Data Surat Berhasil Diubah!', $surat);

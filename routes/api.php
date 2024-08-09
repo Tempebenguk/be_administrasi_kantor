@@ -130,6 +130,11 @@ Route::group(['middleware' => ['auth:api-admin']], function () {
     Route::put('/tamu/{id}', [App\Http\Controllers\Api\tamuController::class, 'update']);
     Route::delete('/tamu/{id}', [App\Http\Controllers\Api\tamuController::class, 'destroy']);
     Route::get('/tamuall', [App\Http\Controllers\Api\tamuController::class, 'indexall']);
+
+    // Nomor
+    Route::get('/nomor', [App\Http\Controllers\Api\formulaController::class, 'index']);
+    Route::get('/nomor/{id}', [App\Http\Controllers\Api\formulaController::class, 'show']);
+    Route::put('/nomor/{id}', [App\Http\Controllers\Api\formulaController::class, 'update']);
 });
 
 
